@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passage — Browse Homes by Class</title>
+  <meta name="description" content="Browse Passage's verified homes across India by tier — High Class and Low Class listings, each with real photos, pricing, and amenities." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== LIGHT MODE (default) – warm, trustworthy, premium ===== */
+    :root {
+      --bg-primary: #fcf8f3;
+      --bg-secondary: #f6f0e9;
+      --bg-tertiary: #efe8df;
+      --bg-glass: rgba(255, 248, 240, 0.65);
+      --border-glass: rgba(190, 170, 155, 0.3);
+      --text-primary: #1e1b1a;
+      --text-secondary: #4b3f3a;
+      --text-muted: #7a6a60;
+      --accent-gold: #c27f3a;
+      --accent-warm: #a67c6e;
+      --accent-green: #6f8f7a;
+      --glow-gold: rgba(194, 127, 58, 0.12);
+      --card-bg: rgba(252, 248, 243, 0.5);
+      --header-bg: rgba(252, 248, 243, 0.85);
+      --ph-bg: linear-gradient(135deg, #ede5db, #e0d6ca);
+      --ph-overlay: radial-gradient(120% 120% at 20% 15%, rgba(194,127,58,0.08), transparent 55%);
+      --ph-tag-bg: rgba(252, 248, 243, 0.6);
+      --toggle-bg: rgba(255, 248, 240, 0.6);
+      --btn-primary-text: #fcf8f3;
+      --btn-primary-hover-text: #1e1b1a;
+      --btn-primary-hover-bg: #d49450;
+      --footer-bg: #f6f0e9;
+    }
+
+    /* ===== DARK MODE ===== */
+    [data-theme="dark"] {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-tertiary: #151412;
+      --bg-glass: rgba(255, 255, 255, 0.035);
+      --border-glass: rgba(255, 255, 255, 0.09);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1a1;
+      --text-muted: #6b6b68;
+      --accent-gold: #d4a853;
+      --accent-warm: #c8946e;
+      --accent-green: #7a9b7e;
+      --glow-gold: rgba(212, 168, 83, 0.10);
+      --card-bg: rgba(255, 255, 255, 0.035);
+      --header-bg: rgba(10, 10, 10, 0.85);
+      --ph-bg: linear-gradient(135deg, #151412, #1b1916);
+      --ph-overlay: radial-gradient(120% 120% at 20% 15%, rgba(212,168,83,0.14), transparent 55%);
+      --ph-tag-bg: rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.035);
+      --btn-primary-text: #141210;
+      --btn-primary-hover-text: #141210;
+      --btn-primary-hover-bg: #e0b862;
+      --footer-bg: #111111;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      overflow-x: hidden;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    ::selection { background: var(--accent-gold); color: var(--bg-primary); }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: pointer; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+    @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+    /* --- placeholder & cards --- */
+    .ph {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--ph-bg);
+      border: 1px solid var(--border-glass);
+      display: flex;
+      align-items: flex-end;
+      min-height: 180px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .ph::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--ph-overlay);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .ph-real-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .ph-tag {
+      position: relative;
+      z-index: 2;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--ph-tag-bg);
+      width: 100%;
+      border-top: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .ph-tag b { color: var(--accent-gold); font-weight: 500; }
+
+    /* --- header --- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      padding: 18px 0;
+      background: var(--header-bg);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glass);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+    .logo .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 100px;
+      font-size: 13.5px;
+      font-weight: 500;
+      border: 1px solid var(--border-glass);
+      transition: all .25s ease;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent-gold);
+      color: var(--btn-primary-text);
+      border-color: var(--accent-gold);
+    }
+    .btn-primary:hover {
+      background: var(--btn-primary-hover-bg);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--glow-gold);
+      color: var(--btn-primary-hover-text);
+    }
+
+    /* --- theme toggle button (header) --- */
+    .theme-toggle-btn {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 100px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      margin-left: 16px;
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-primary);
+    }
+    .theme-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    /* --- page head --- */
+    .page-head {
+      padding: 80px 0 50px;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      border: 1px solid rgba(194,127,58,0.3);
+      padding: 7px 14px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+      background: var(--glow-gold);
+      transition: background 0.3s ease;
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: clamp(2rem, 1.6rem + 2vw, 3.4rem);
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+    .page-head p {
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin: 18px auto 0;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    /* --- tier toggle --- */
+    .tier-toggle {
+      display: flex;
+      justify-content: center;
+      margin: 44px 0 60px;
+    }
+    .tier-toggle-inner {
+      position: relative;
+      display: inline-flex;
+      background: var(--toggle-bg);
+      border: 1px solid var(--border-glass);
+      border-radius: 100px;
+      padding: 5px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .tier-btn {
+      position: relative;
+      z-index: 2;
+      padding: 12px 30px;
+      border: none;
+      background: none;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color .3s ease;
+    }
+    .tier-btn.active {
+      color: var(--btn-primary-text);
+    }
+    .tier-indicator {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: 5px;
+      width: calc(50% - 5px);
+      background: var(--accent-gold);
+      border-radius: 100px;
+      z-index: 1;
+      transition: transform .35s cubic-bezier(.4,0,.2,1), background 0.3s ease;
+    }
+    .tier-indicator.to-low {
+      transform: translateX(100%);
+    }
+
+    /* --- panels & grid --- */
+    .section-pad { padding: 0 0 120px; }
+    .tier-panel { display: none; }
+    .tier-panel.active { display: block; }
+
+    .tier-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .tier-label-row h2 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+    .tier-count {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+    @media (max-width: 900px) { .home-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .home-grid { grid-template-columns: 1fr; } }
+
+    .home-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-glass);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: border-color .3s, transform .3s, background 0.3s ease;
+      backdrop-filter: blur(2px);
+    }
+    .home-card:hover {
+      border-color: rgba(194,127,58,0.4);
+      transform: translateY(-3px);
+    }
+    .home-card .ph {
+      border-radius: 0;
+      border: none;
+      min-height: 210px;
+    }
+    .home-card-body {
+      padding: 22px;
+    }
+    .home-tier-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 5px;
+      margin-bottom: 12px;
+    }
+    .home-tier-badge.high {
+      background: rgba(194,127,58,0.15);
+      color: var(--accent-gold);
+    }
+    .home-tier-badge.low {
+      background: rgba(111,143,122,0.15);
+      color: var(--accent-green);
+    }
+    .home-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+    .home-location {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      transition: color 0.3s ease;
+    }
+    .home-amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .amenity-chip {
+      font-size: 11px;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-glass);
+      padding: 4px 9px;
+      border-radius: 100px;
+      background: var(--bg-glass);
+      transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    }
+    .home-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-glass);
+      transition: border-color 0.3s ease;
+    }
+    .home-price {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--accent-gold);
+    }
+    .home-price span {
+      display: block;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      transition: color 0.3s ease;
+    }
+    .home-view-btn {
+      font-size: 12.5px;
+      color: var(--text-primary);
+      border: 1px solid var(--border-glass);
+      padding: 8px 14px;
+      border-radius: 100px;
+      transition: all .25s;
+      background: transparent;
+    }
+    .home-view-btn:hover {
+      background: var(--accent-gold);
+      color: var(--btn-primary-text);
+      border-color: var(--accent-gold);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-glass);
+      padding: 36px 0;
+      background: var(--footer-bg);
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp .6s ease forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* responsive tweaks */
+    @media (max-width: 600px) {
+      .nav-right .btn-primary { display: none; }
+      .theme-toggle-btn span { display: none; }
+      .theme-toggle-btn { padding: 8px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="index.html" class="logo"><img src="elements/file_000000006c908207bc34500e9d1625a2.png" style="width:20px; height:20px; border-radius: 20px;"><span></span>Passage</a>
+      <div class="nav-right">
+        <a href="index.html#inquire" class="btn btn-primary">Start your search</a>
+        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5" />
+            <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </g>
+          </svg>
+          <span id="themeLabel">Light</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Browse by tier</span>
+      <h1>Every home, honestly categorized.</h1>
+      <p>No blended listings, no surprises. Pick a tier and see exactly what it gets you.</p>
+
+      <div class="tier-toggle">
+        <div class="tier-toggle-inner">
+          <div class="tier-indicator" id="tierIndicator"></div>
+          <button class="tier-btn active" id="btnHigh" data-tier="high">High Class</button>
+          <button class="tier-btn" id="btnLow" data-tier="low">Low Class</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad">
+    <div class="wrap">
+
+      <!-- HIGH CLASS PANEL -->
+      <div class="tier-panel active" id="panel-high">
+        <div class="tier-label-row">
+          <h2>High Class homes</h2>
+          <span class="tier-count">3 listings</span>
+        </div>
+        <div class="home-grid">
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi 1.jpeg" alt="Skyline Penthouse, Bandra West" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Skyline Penthouse</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge high">High class</span>
+              <div class="home-title">Skyline Penthouse</div>
+              <div class="home-location">Connaught Place, Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Sea view</span>
+                <span class="amenity-chip">Private terrace</span>
+                <span class="amenity-chip">24/7 security</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹1,85,000/mo<span>≈ ₹2,220</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi 2.jpeg" alt="Palm-Fringed Villa, Assagao" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Palm-Fringed Villa</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge high">High class</span>
+              <div class="home-title">Palm-Fringed Villa</div>
+              <div class="home-location">Greater Kailash (GK), Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Private pool</span>
+                <span class="amenity-chip">Garden</span>
+                <span class="amenity-chip">Housekeeping</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹1,20,000/mo<span>≈ ₹1,440</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi 3.jpeg" alt="Heritage Bungalow, Jubilee Hills" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Heritage Bungalow</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge high">High class</span>
+              <div class="home-title">Heritage Bungalow</div>
+              <div class="home-location">Hauz Khas, Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Private driveway</span>
+                <span class="amenity-chip">Staff quarters</span>
+                <span class="amenity-chip">Home office</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹95,000/mo<span>≈ ₹1,140</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- LOW CLASS PANEL -->
+      <div class="tier-panel" id="panel-low">
+        <div class="tier-label-row">
+          <h2>Low Class homes</h2>
+          <span class="tier-count">3 listings</span>
+        </div>
+        <div class="home-grid">
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi low 1.jpeg" alt="Cozy Studio, Mylapore" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Cozy Studio</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge low">Low class</span>
+              <div class="home-title">Cozy Studio</div>
+              <div class="home-location">Saket, Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Furnished</span>
+                <span class="amenity-chip">Wifi included</span>
+                <span class="amenity-chip">Walk to temple lane</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹18,000/mo<span>≈ ₹215</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi low 2.jpeg" alt="Shared PG Room, Koramangala" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Shared PG Room</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge low">Low class</span>
+              <div class="home-title">Shared PG Room</div>
+              <div class="home-location">Vasant Kunj, Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Meals included</span>
+                <span class="amenity-chip">Housekeeping</span>
+                <span class="amenity-chip">Near metro</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹12,000/mo<span>≈ ₹145</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="home-card reveal">
+            <div class="ph">
+              <img class="ph-real-img" src="elements/delhi low 3.jpeg" alt="Budget 1BHK, Old Delhi" loading="lazy" onerror="this.remove()">
+              <span class="ph-tag"><span>Budget 1BHK</span><b style="cursor: pointer;">Book Now</b></span>
+            </div>
+            <div class="home-card-body">
+              <span class="home-tier-badge low">Low class</span>
+              <div class="home-title">Budget 1BHK</div>
+              <div class="home-location">Dwarka, Delhi</div>
+              <div class="home-amenities">
+                <span class="amenity-chip">Furnished</span>
+                <span class="amenity-chip">Near metro</span>
+                <span class="amenity-chip">Market nearby</span>
+              </div>
+              <div class="home-footer">
+                <div class="home-price">₹15,000/mo<span>≈ ₹180</span></div>
+                <a href="#" class="home-view-btn">View home</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Passage Homes. All rights reserved.</div>
+</footer>
+
+<script>
+  (function() {
+    // ---- Tier toggle ----
+    const btnHigh = document.getElementById('btnHigh');
+    const btnLow = document.getElementById('btnLow');
+    const indicator = document.getElementById('tierIndicator');
+    const panelHigh = document.getElementById('panel-high');
+    const panelLow = document.getElementById('panel-low');
+
+    function showTier(tier) {
+      const isHigh = tier === 'high';
+      btnHigh.classList.toggle('active', isHigh);
+      btnLow.classList.toggle('active', !isHigh);
+      indicator.classList.toggle('to-low', !isHigh);
+      panelHigh.classList.toggle('active', isHigh);
+      panelLow.classList.toggle('active', !isHigh);
+    }
+
+    btnHigh.addEventListener('click', function(e) {
+      e.preventDefault();
+      showTier('high');
+    });
+    btnLow.addEventListener('click', function(e) {
+      e.preventDefault();
+      showTier('low');
+    });
+
+    // ensure initial state matches active class
+    if (btnHigh.classList.contains('active')) {
+      indicator.classList.remove('to-low');
+    } else if (btnLow.classList.contains('active')) {
+      indicator.classList.add('to-low');
+    }
+
+    // ---- Theme toggle ----
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('passage-theme', theme);
+      // Update icon and label
+      if (theme === 'dark') {
+        themeLabel.textContent = 'Dark';
+        // moon icon
+        themeIcon.innerHTML = `
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        `;
+      } else {
+        themeLabel.textContent = 'Light';
+        // sun icon
+        themeIcon.innerHTML = `
+          <circle cx="12" cy="12" r="5" />
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </g>
+        `;
+      }
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Load saved theme or system preference
+    const savedTheme = localStorage.getItem('passage-theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    } else {
+      setTheme('light');
+    }
+  })();
+</script>
+
+</body>
+</html>
