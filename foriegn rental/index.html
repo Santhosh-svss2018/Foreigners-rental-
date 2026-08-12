@@ -871,7 +871,25 @@
       .city-card.open .city-expand-btn svg {
         transform: rotate(45deg);
       }
-
+      .rental_homes {
+        margin-top: 18px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: none;
+        border: 1px solid var(--border-glass);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 13px;
+        color: var(--text-secondary);
+        transition: all 0.25s;
+      }
+      .rental_homes:hover{
+        border-color: var(--accent-gold);
+        color: var(--text-primary);
+        transition: all 0.25s;
+      }
       .city-detail {
         max-height: 0;
         overflow: hidden;
@@ -1382,6 +1400,14 @@
             </button>
             <a href="#inquire" class="btn btn-primary">Start your search</a>
           </div>
+          <div style="display: flex; align-items: center; gap: 16px;" onclick="window.location.href='login.html'">
+            <!-- <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+              <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <span class="label">Theme</span>
+            </button> -->
+            <a href="#inquire" class="btn btn-primary">Sign-in</a>
+          </div>
         </nav>
       </div>
     </header>
@@ -1544,8 +1570,10 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                          <b style="cursor: pointer;" onclick="window.location.href='homes (chennai).html'">➡️view rental homes here⬅️</b>
-                      </div>
+                          <button class="rental_homes" onclick="window.location.href='homes (chennai).html'">
+                            view rental homes here
+                          </button>
+                        </div>
                     </div>
                   <div class="detail-block">
                     <span class="detail-label">Where to eat</span>
@@ -1636,7 +1664,9 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                        <b style="cursor: pointer;" onclick="window.location.href='homes (bangalore).html'">➡️view rental homes here⬅️</b>
+                        <button class="rental_homes" onclick="window.location.href='homes (bangalore).html'">
+                            view rental homes here
+                          </button>
                       </div>
                     </div></ul>
                   <div class="detail-block">
@@ -1728,7 +1758,9 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                        <b style="cursor: pointer;" onclick="window.location.href='homes (mumbai).html'">➡️view rental homes here⬅️</b>
+                        <button class="rental_homes" onclick="window.location.href='homes (mumbai).html'">
+                            view rental homes here
+                          </button>
                       </div>
                     </div></ul>
                   <div class="detail-block">
@@ -1820,7 +1852,9 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                        <b style="cursor: pointer;" onclick="window.location.href='homes (delhi).html'">➡️view rental homes here⬅️</b>
+                        <button class="rental_homes" onclick="window.location.href='homes (delhi).html'">
+                            view rental homes here
+                          </button>
                       </div>
                     </div></ul>
                   <div class="detail-block">
@@ -1911,7 +1945,9 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                        <b style="cursor: pointer;" onclick="window.location.href='homes (goa).html'">➡️view rental homes here⬅️</b>
+                        <button class="rental_homes" onclick="window.location.href='homes (goa).html'">
+                            view rental homes here
+                          </button>
                       </div>
                     </div></ul>
                   <div class="detail-block">
@@ -2003,9 +2039,9 @@
                     <span class="detail-label">Sample homes</span>
                     <div class="listing-row">
                       <div class="listing-info">
-                        <b style="cursor: pointer;" onclick="window.location.href='homes (hyderabad).html'">➡️view rental homes here⬅️
-
-                        </b>
+                        <button class="rental_homes" onclick="window.location.href='homes (hyderabad).html'">
+                            view rental homes here
+                          </button>
                       </div>
                     </div>
                   <div class="detail-block">
